@@ -21,7 +21,7 @@ export default function PastCouncil() {
     <section className="py-20 bg-gray-50 min-h-screen">
       <div className="container mx-auto text-center">
         <h2 className="gradient-title text-3xl md:text-4xl">
-          Past Executive Council
+          Past RIC Student Committee 
         </h2>
 
         {/* Dropdown */}

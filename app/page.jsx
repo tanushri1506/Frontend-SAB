@@ -132,10 +132,10 @@ export default function Home() {
       <section id="council" className="bg-gray-50 py-20">
         <div className="container mx-auto text-center px-4 md:px-6">
           <h2 className="gradient-title text-3xl md:text-4xl ">
-            Executive Committee
+            Executive Council
           </h2>
           <p className="mt-3 text-gray-600 max-w-[700px] mx-auto">
-            The Executive Committee of SAB IITG includes the General Secretary,
+            The Executive Council of SAB IITG includes the General Secretary,
             Joint Secretary, and representatives from Bachelors, Masters, and
             PhD programs. The council is chaired by the Associate Dean of
             Academic Courses.
@@ -182,7 +182,7 @@ export default function Home() {
             size={"lg"}
             className="bg-[#091c53] hover:bg-[#0f2b81] cursor-pointer mt-10"
           >
-            <Link href="/past-committee">Past Executive Committee</Link>
+            <Link href="/past-council">Past Executive Council</Link>
           </Button>
         </div>
       </section>
@@ -250,6 +250,12 @@ export default function Home() {
               ))}
             </div>
           </div>
+          <Link
+  href="/gallery"
+  className="pt-5 inline-flex items-center gap-2 text-[#091c53] font-medium hover:text-yellow-500 transition"
+>
+  View All →
+</Link>
         </div>
 
         

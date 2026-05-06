@@ -8,13 +8,13 @@ import { Menu, X, ChevronDown } from "lucide-react";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/#council", label: "Executive Committee" },
+  { href: "/#council", label: "Executive Council" },
   { href: "/#events", label: "Events" },
   { href: "/ug-council", label: "UG Council" },
   { href: "/phd-council", label: "Phd Council" },
   { href: "/rsf", label: "RSF" },
   { href: "/faaq", label: "FAAQs" },
-  { href: "/#gallery", label: "Gallery" },
+  { href: "/gallery", label: "Gallery" },
   { href: "/#contact", label: "Contact" },
 ];
 
@@ -69,10 +69,10 @@ const Header = () => {
           {navLinks.map((link) => {
             if (link.label === "Events") {
               return (
-                <div key={link.href} 
-                    ref={dropdownRef}   className="relative flex items-center gap-1">
-
-                  {/* Events Link */}
+                <div
+  key={link.href}
+  className="relative flex items-center gap-1 group"
+>{/* Events Link */}
                   <Link
                     href={link.href}
                     className="text-sm font-medium hover:text-yellow-400 transition"
@@ -82,17 +82,14 @@ const Header = () => {
 
                   {/* Dropdown Arrow */}
                   <ChevronDown
-                    size={16}
-                    className={`cursor-pointer hover:text-yellow-400 transition-transform ${
-    openDropdown ? "rotate-180" : ""
-  }`}
-                    onClick={() => setOpenDropdown(!openDropdown)}
-                  />
+    size={16}
+    className="transition-transform group-hover:rotate-180"
+  />
+
 
                   {/* Dropdown Menu */}
-                  {openDropdown && (
-                    <div className="absolute top-full mt-2 w-44 bg-white text-black rounded-lg shadow-lg py-2 z-50">
-                      {eventDropdown.map((item) => (
+                   <div className="absolute top-full mt-1 w-44 bg-white text-black rounded-lg shadow-lg py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+  {eventDropdown.map((item) => (
                         <Link
                           key={item.href}
                           href={item.href}
@@ -102,7 +99,7 @@ const Header = () => {
                         </Link>
                       ))}
                     </div>
-                  )}
+                 
                 </div>
               );
             }

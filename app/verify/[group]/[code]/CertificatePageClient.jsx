@@ -14,11 +14,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { fetchCertificate } from "@/lib/certificate";
 import CertificateGuide from "@/components/CertificateGuide";
+import { ChevronDown } from "lucide-react";
 
 export default function CertificatePageClient({ group, code }) {
   const [certificate, setCertificate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [showSignedBy, setShowSignedBy] = useState(false);
 
   useEffect(() => {
     fetchCertificate(group, code)
@@ -35,30 +37,30 @@ export default function CertificatePageClient({ group, code }) {
   }, [group, code]);
 
   const handleDownload = async () => {
-  try {
-    const res = await fetch("http://localhost:8000/api/send-certificate/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        credential_id: certificate.credential_id,
-      }),
-    });
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/send-certificate/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          credential_id: certificate.credential_id,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.error || "Something went wrong");
-      return;
+      if (!res.ok) {
+        alert(data.error || "Something went wrong");
+        return;
+      }
+
+      alert("Certificate has been sent to your registered email.");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send certificate.");
     }
-
-    alert("Certificate has been sent to your registered email.");
-  } catch (err) {
-    console.error(err);
-    alert("Failed to send certificate.");
-  }
-};
+  };
 
   if (loading) {
     return (
@@ -121,7 +123,6 @@ export default function CertificatePageClient({ group, code }) {
             <p className="text-yellow-300 mt-2 text-sm md:text-lg">
               Indian Institute of Technology Guwahati
             </p>
-
           </div>
 
           <div className="px-6 md:px-10 py-8">
@@ -135,66 +136,100 @@ export default function CertificatePageClient({ group, code }) {
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
-              
+              <Card className="p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 className="text-xl font-semibold text-[#091c53] mb-5">
+                  Credential Details
+                </h3>
 
-             <Card className="p-6 rounded-2xl border border-gray-200 shadow-sm">
-    <h3 className="text-xl font-semibold text-[#091c53] mb-5">
-      Credential Details
-    </h3>
+                <div className="space-y-5">
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">
+                      Certificate Type
+                    </p>
+                    <p className="text-lg font-semibold text-gray-900 leading-snug">
+                      {certificate.certificate_type_display ||
+                        certificate.certificate_type ||
+                        "-"}
+                    </p>
+                  </div>
 
-    <div className="space-y-5">
-
-      <div>
-        <p className="text-sm text-gray-500 mb-2">Certificate Type</p>
-        <p className="text-lg font-semibold text-gray-900 leading-snug">
-          {certificate.certificate_type_display ||
-            certificate.certificate_type ||
-            "-"}
-        </p>
-      </div>
-
-      <InfoRow label="Designation / Department" value={certificate.designation} />
-      <InfoRow label="Academic Session" value={certificate.session} />
-      <InfoRow
-        label="Issue Date"
-        value={new Date(certificate.issue_date).toLocaleDateString("en-IN", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}
-      />
-    </div>
-  </Card>
-
-              
+                  <InfoRow
+                    label="Designation / Department"
+                    value={certificate.designation}
+                  />
+                  <InfoRow
+                    label="Academic Session"
+                    value={certificate.session}
+                  />
+                  <InfoRow
+                    label="Issue Date"
+                    value={new Date(certificate.issue_date).toLocaleDateString(
+                      "en-IN",
+                      {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      },
+                    )}
+                  />
+                </div>
+              </Card>
 
               <Card className="p-6 rounded-2xl border border-gray-200 shadow-sm">
-    <h3 className="text-xl font-semibold text-[#091c53] mb-5">
-      Verification Info
-    </h3>
+                <h3 className="text-xl font-semibold text-[#091c53] mb-5">
+                  Verification Info
+                </h3>
 
-    <div className="space-y-5">
-      <div>
-        <p className="text-sm text-gray-500 mb-2">Credential ID</p>
-        <div className="rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 font-mono text-sm md:text-base text-gray-900 break-all">
-          {certificate.credential_id || "-"}
-        </div>
-      </div>
+                <div className="space-y-5">
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">Credential ID</p>
+                    <div className="rounded-xl bg-gray-50 border border-gray-200 px-4 py-3 font-mono text-sm md:text-base text-gray-900 break-all">
+                      {certificate.credential_id || "-"}
+                    </div>
+                  </div>
 
-      <InfoRow
-        label="Certificate Number"
-        value={certificate.certificate_number}
-      />
+                  <InfoRow
+                    label="Certificate Number"
+                    value={certificate.certificate_number}
+                  />
 
-      <div>
-        <p className="text-sm text-gray-500 mb-2">Verification Status</p>
-        <div className="inline-flex items-center gap-2 rounded-full bg-green-50 border border-green-200 px-4 py-2 text-green-700 font-semibold">
-          <CheckCircle2 className="h-5 w-5" />
-          Verified Credential
-        </div>
-      </div>
-    </div>
-  </Card>
+                  <div>
+  <div
+    className="flex items-center justify-between cursor-pointer"
+    onClick={() => setShowSignedBy(!showSignedBy)}
+  >
+    <p className="text-sm text-gray-500 mb-2">Signed By</p>
+    
+    <ChevronDown
+      className={`h-4 w-4 text-gray-500 transition-transform ${
+        showSignedBy ? "rotate-180" : ""
+      }`}
+    />
+  </div>
+
+  {showSignedBy && (
+    <ul className="list-disc pl-5 space-y-2 text-gray-800 text-sm">
+      {certificate.signed_by
+        ?.split("\n")
+        .filter((line) => line.trim() !== "")
+        .map((line, index) => (
+          <li key={index}>{line}</li>
+        ))}
+    </ul>
+  )}
+</div>
+
+                  <div>
+                    <p className="text-sm text-gray-500 mb-2">
+                      Verification Status
+                    </p>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-green-50 border border-green-200 px-4 py-2 text-green-700 font-semibold">
+                      <CheckCircle2 className="h-5 w-5" />
+                      Verified Credential
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </div>
 
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
@@ -223,16 +258,14 @@ export default function CertificatePageClient({ group, code }) {
                 Download Certificate
               </Button>
             </div>
-            <CertificateGuide/>
+            <CertificateGuide />
           </div>
         </Card>
 
         <div className="text-center mt-8 text-sm text-gray-500 px-4">
-          This is an official verification page issued by the Students'
-          Academic Board, IIT Guwahati.
+          This is an official verification page issued by the Students' Academic
+          Board, IIT Guwahati.
         </div>
-
-        
       </div>
     </div>
   );

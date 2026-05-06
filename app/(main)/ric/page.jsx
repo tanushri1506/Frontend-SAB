@@ -138,7 +138,7 @@ const Page = () => {
             size={"lg"}
             className="bg-[#091c53] hover:bg-[#0f2b81] cursor-pointer mt-10"
           >
-            <Link href="/ric-past-committee">Past Executive Committee</Link>
+            <Link href="/ric-past-committee">Past RIC Student Committee</Link>
           </Button>
         </div>
       </section>

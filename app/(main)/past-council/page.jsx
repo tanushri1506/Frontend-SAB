@@ -5,13 +5,13 @@ import { Card } from "@/components/ui/card";
 import { LinkedinIcon, Phone, Mail } from "lucide-react";
 import Image from "next/image";
 import { usePastYears, useCouncilByYear } from "@/lib/past-council";
+import HoverInfoBox from "@/components/HoverInfoBox";
 
 export default function PastCouncil() {
   const years = usePastYears();
   const [selectedYear, setSelectedYear] = useState(years[0] || "");
   const council = useCouncilByYear(selectedYear);
 
-  // When years are loaded, set default selected year
   useEffect(() => {
     if (years.length > 0 && !selectedYear) {
       setSelectedYear(years[0]);
@@ -42,7 +42,8 @@ export default function PastCouncil() {
 
         {/* Council Grid */}
         <div className="mt-12 grid max-w-5xl gap-6 md:grid-cols-2 lg:grid-cols-3 mx-auto">
-          {council.map(({ id, name, post, photo, email, linkedin }) => (
+          {council.map(({ id, name, post, photo, email, linkedin, extra_por }) => (
+            <HoverInfoBox key={id ?? `${name}-${post}`} content={extra_por}>
             <Card
               key={id}
               className="flex flex-col items-center p-6 shadow-md border-[#091c53] border-2 hover:scale-[1.08] ease-out transition-all duration-300 hover:shadow-[#091c53] hover:shadow-2xl rounded-xl"
@@ -77,6 +78,7 @@ export default function PastCouncil() {
                 )}
               </div>
             </Card>
+            </HoverInfoBox>
           ))}
         </div>
       </div>
